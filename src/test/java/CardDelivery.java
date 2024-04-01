@@ -1,4 +1,5 @@
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.selector.ByText;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -27,25 +28,21 @@ class CardDelivery {
         $("[name='phone']").setValue("+79007007009");
         $(".checkbox__box").click();
         $(".button").click();
-        $(byText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).shouldHave(text("04.04.2024"));
     }
 
-//    @Test
-//    void cardOrderSecondTest() {
-//        open("http://localhost:9999");
-//
-//        $("[placeholder='Город']").type("Пе");
-//        $(byText("Петропавловск-Камчатский")).click();
-//        $("[placeholder='Дата встречи']").click();
-//        $(By.xpath("//div[@class='popup__container'])")).shouldBe(visible, Duration.ofSeconds(10));
-//        $(".calendar-input__custom-control").sendKeys("05.04.2024");
-////                sendKeys(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-////        $(".popup").sendKeys(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-////        $x("//div[@class='popup']").sendKeys(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-////        $(".popup").selectOption(LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-//        $("[name='name']").setValue("Иванов Иван");
-//        $("[name='phone']").setValue("+79007007009");
-//        $(".checkbox__box").click();
-//        $(".button").click();
-//    }
+    @Test
+    void cardOrderSecondTest() {
+        open("http://localhost:9999");
+
+        $("[placeholder='Город']").type("Пе");
+        $(byText("Петропавловск-Камчатский")).click();
+        $("[placeholder='Дата встречи']").click();
+        $$(".calendar__day").findBy(text("8")).click();
+        $("[name='name']").setValue("Иванов Иван");
+        $("[name='phone']").setValue("+79007007009");
+        $(".checkbox__box").click();
+        $(".button").click();
+        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).shouldHave(text("08.04.2024"));
+    }
 }
