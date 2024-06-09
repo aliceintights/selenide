@@ -8,7 +8,9 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
@@ -36,18 +38,18 @@ class CardDelivery {
     @Test
     void cardOrderSecondTest() {
         open("http://localhost:9999");
-        var deliveryDate = LocalDate.now().plusDays(21).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        var deliveryMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        var redeliveryDate = LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        var deliveryMonth = Calendar.MONTH;
 
         $("[placeholder='Город']").type("Пе");
-        $(byText("Петропавловск-Камчатский")).click();
-        $("[placeholder='Дата встречи']").click();
-        $(".calendar__arrow.calendar__arrow_direction_right").click();
-        $$(".calendar__day").findBy(text("7")).click();
+        $$(".menu-item").find(text("Петропавловск-Камчатский")).click();
+        $("[placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
+        $("[placeholder='Дата встречи']").setValue(redeliveryDate).shouldHave(value(String.valueOf(deliveryMonth)));
+        $(".calendar").shouldBe(visible).sendKeys(redeliveryDate);
         $("[name='name']").setValue("Иванов Иван");
         $("[name='phone']").setValue("+79007007009");
         $(".checkbox__box").click();
         $(".button").click();
-        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).shouldHave(text("Успешно! Встреча успешно забронирована на " + deliveryDate));
+        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).shouldHave(text("Успешно! Встреча успешно забронирована на " + redeliveryDate));
     }
 }
