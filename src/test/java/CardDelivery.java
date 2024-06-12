@@ -38,14 +38,17 @@ class CardDelivery {
     @Test
     void cardOrderSecondTest() {
         open("http://localhost:9999");
-        var redeliveryDate = LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        var deliveryDate = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        var redeliveryDate = LocalDate.now().plusDays(30).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         var deliveryMonth = Calendar.MONTH;
 
         $("[placeholder='Город']").type("Пе");
         $$(".menu-item").find(text("Петропавловск-Камчатский")).click();
         $("[placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
-        $("[placeholder='Дата встречи']").setValue(redeliveryDate).shouldHave(value(String.valueOf(deliveryMonth)));
-        $(".calendar").shouldBe(visible).sendKeys(redeliveryDate);
+        if (!deliveryDate.equals(redeliveryDate)) {
+            $(".calendar__arrow_direction_right").click();
+        }
+        $("[placeholder='Дата встречи']").setValue(redeliveryDate);
         $("[name='name']").setValue("Иванов Иван");
         $("[name='phone']").setValue("+79007007009");
         $(".checkbox__box").click();
