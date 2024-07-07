@@ -20,6 +20,10 @@ import static io.netty.handler.codec.DateFormatter.format;
 
 class CardDelivery {
 
+    private String generateDate(long addDays, String pattern){
+        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
+    }
+
     @Test
     void cardOrderMainTest() {
         open("http://localhost:9999");
@@ -38,17 +42,17 @@ class CardDelivery {
     @Test
     void cardOrderSecondTest() {
         open("http://localhost:9999");
-        var deliveryDate = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        var redeliveryDate = LocalDate.now().plusDays(30).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        var deliveryMonth = Calendar.MONTH;
 
         $("[placeholder='Город']").type("Пе");
         $$(".menu-item").find(text("Петропавловск-Камчатский")).click();
-        $("[placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
-        if (!deliveryDate.equals(redeliveryDate)) {
+
+        String redeliveryDate = generateDate(7,"dd.MM.yyyy");
+        $("[data-test-id='date']").click();
+        if (!generateDate(3, "MM").equals(generateDate(7, "MM"))) {
             $(".calendar__arrow_direction_right").click();
         }
-        $("[placeholder='Дата встречи']").setValue(redeliveryDate);
+        $$(".calendar__day").find(text(generateDate(7, "dd"))).click();
+        $("[data-test-id='date'] input").setValue(redeliveryDate);
         $("[name='name']").setValue("Иванов Иван");
         $("[name='phone']").setValue("+79007007009");
         $(".checkbox__box").click();
