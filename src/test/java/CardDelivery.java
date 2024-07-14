@@ -51,7 +51,7 @@ class CardDelivery {
         if (!generateDate(3, "MM").equals(generateDate(7, "MM"))) {
             $(".calendar__arrow_direction_right").click();
         }
-        $$(".calendar__day").find(text(generateDate(7, "dd"))).click();
+        $$(".calendar__day").find(text(generateDate(7, "d"))).click();
         $("[data-test-id='date'] input").setValue(redeliveryDate);
         $("[name='name']").setValue("Иванов Иван");
         $("[name='phone']").setValue("+79007007009");
